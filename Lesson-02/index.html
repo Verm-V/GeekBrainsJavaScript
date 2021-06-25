@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Скрипты -->
+    <script src="script-01.js" type="text/javascript" charset="utf-8"></script>
+    <!-- -->
+
+    <!-- Стили -->
+    <style>
+        pre {
+          font-family: Consolas,"courier new";
+          color: black;
+          background-color: #e8e8e8;
+          padding: 2px;
+          font-size: 90%;
+        }
+    </style>
+    <!-- -->
+
+
+</head>
+<body>
+    <h1>Урок 02 - Основные операторы JavaScript</h1>
+
+<ul>
+    <li>
+        <h2>Задание 01</h2>
+        <p>Почему код дает именно такие результаты?</p>
+        <pre>
+var a = 1, b = 1, c, d;
+c = ++a; alert(c);           // 2 - сначала происходит инкремент переменной 'a', затем ее значение присваивается переменной 'c'
+d = b++; alert(d);           // 1 - сначала переменной 'c' присваивается значение из 'b', затем происходит инкремент 'b', результат присваивается в 'd'
+c = (2+ ++a); alert(c);      // 5 - сначала происходит инкремент 'a' затем ее значение складывается с '2', результат присваивается в 'c'
+d = (2+ b++); alert(d);      // 4 - сначала '2' складывается с значением из 'b' (это помещается в 'd'), значение в 'b' инкрементируется
+alert(a);                    // 3 - значение переменной 'a' было дважды инкрементировано в предыдущих инструкциях
+alert(b);                    // 3 - значение переменной 'b' было дважды инкрементировано в предыдущих инструкциях
+        </pre>
+        <hr>
+    </li>
+
+    <li>
+        <h2>Задание 02</h2>
+        <p>Чему будет равен x?</p>
+        <pre>
+var a = 2;
+var x = 1 + (a *= 2);            
+        </pre>
+        <p>Переменная <b>x</b> будет содержать значение <b><span id="t02_01"></span></b></p>
+        <p>В выражение сначала удваивается значение переменной <b>a</b> затем оно прибавляется к <b>1</b></p>
+        <script async src="script-02.js" type="text/javascript" charset="utf-8"></script>
+        <hr>
+    </li>
+
+    <li>
+        <h2>Задание 03</h2>
+        <p></p>
+        <hr>
+    </li>
+
+</ul>    
+
+</body>
+</html>
