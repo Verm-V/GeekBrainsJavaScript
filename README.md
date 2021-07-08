@@ -1,4 +1,4 @@
-### Курс JavaScript (GeekBrains)  
+﻿### Курс JavaScript (GeekBrains)  
   
 Репозиторий предназначен для домашних заданий  
   
