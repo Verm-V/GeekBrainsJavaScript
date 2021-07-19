@@ -2,9 +2,44 @@
 
 //Класс товара
 class Product{
+    #name;//Наименование товара
+    #price;//Цена за единицу товара
+
     constructor(name, price) {
-        this.name = name;
-        this.price = price;
+        this.#name = name;
+        this.#price = price;
+    }
+
+    getName() {
+        return this.#name;
+    }
+
+    getPrice() {
+        return this.#price;
+    }
+}
+
+//Класс товарной позиции (в корзине или на складе)
+class Item{
+    #product;//Тип товара
+    #quanity;//Количество товара
+
+    constructor(product, quanity) {
+        this.#product = product;
+        this.#quanity = quanity;
+    }
+
+    getProduct() {
+        return this.#product;
+    }
+
+    getQuanity() {
+        return this.#quanity;
+    }
+
+    //Возвращает полную стоимость товарной позиции
+    getTotalPrice() {
+        return (this.#product.getPrice() * this.#quanity);
     }
 }
 
@@ -16,17 +51,17 @@ class Basket{
     countPrice() {
         let totalPrice = 0;//Сюда считается общая цена
 
-        for (const product of this.#products) {
-            totalPrice += product.price;
+        for (const item of this.#products) {
+            totalPrice += ( item.getTotalPrice() );
         }
         return totalPrice;
             
     }
 
     //Добавление товара в корзину
-    addProduct(product) {
+    addItem(product, quanity) {
         if (product instanceof Product) {
-            this.#products.push(product);
+            this.#products.push(new Item(product, quanity));
             return true;
         } else {
             return false;
@@ -37,8 +72,8 @@ class Basket{
     toString() {
         let lineBasket = "";
 
-        for (const product of this.#products) {
-            lineBasket += "|" + product.name + " - " + product.price + " руб.<br>"
+        for (const item of this.#products) {
+            lineBasket += "|" + item.getProduct().getName() + " - " + item.getProduct().getPrice() + " руб. - " + item.getQuanity() + " шт.<br>";
         }
         return lineBasket;
     }
@@ -50,9 +85,9 @@ class Basket{
 var basket = new Basket();
 
 //Забиваем корзину тестовыми данными
-basket.addProduct(new Product("Лыжи", 100));
-basket.addProduct(new Product("Палки", 10));
-basket.addProduct(new Product("Копалки", 111));
+basket.addItem(new Product("Лыжи", 100), 10);
+basket.addItem(new Product("Палки", 50), 10);
+basket.addItem(new Product("Копалки", 10), 5);
 
 //Подсчитываем и выводим на экран
 resultOutput();
@@ -63,7 +98,8 @@ resultOutput();
 function addProduct(){
     var productName = document.getElementById("productName").value;
     var productPrice = document.getElementById("productPrice").valueAsNumber;
-    basket.addProduct(new Product(productName, productPrice));
+    var productQuanity = document.getElementById("productQuanity").valueAsNumber;
+    basket.addItem(new Product(productName, productPrice), productQuanity);
     resultOutput();
 }
 
