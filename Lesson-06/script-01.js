@@ -1,4 +1,4 @@
-﻿import { Product, ProductPosition, Basket, Catalogue, Uid } from './classes.js';
+﻿import { Product, Basket, Catalogue} from './classes.js';
 
 //Создаем каталог и корзину
 var catalogue = new Catalogue();
