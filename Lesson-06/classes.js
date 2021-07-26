@@ -165,6 +165,8 @@ export class Storage{
                 let tr = document.createElement('tr');
                 let name = document.createElement('td');
                 name.innerHTML = item.getProduct().getName();
+                name.className = "galleryClick";
+                name.id = item.getId();
                 let price = document.createElement('td');
                 price.innerHTML = item.getProduct().getPrice();
                 let quanity = document.createElement('td');
@@ -173,7 +175,7 @@ export class Storage{
                 let button = document.createElement('input');
                 button.type = "button";
                 button.value = this.#msgButton;
-                button.id = item.getProduct().getId();
+                button.id = item.getId();
                 buttonCell.appendChild(button);
 
                 tr.appendChild(name);

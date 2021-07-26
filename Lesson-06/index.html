@@ -7,8 +7,9 @@
     <title>Document</title>
 
     <!-- Скрипты -->
-        <script type="module" src="script-01.js"></script>
-    <!-- -->
+        <script async type="module" src="script-01.js"></script>
+        <script async src="gallery.js" type="text/javascript" charset="utf-8"></script>
+        <!-- -->
 
     <!-- Стили -->
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -57,6 +58,28 @@
             </ul>
         </li>
     </ol>
+
+    <!-- Модальное окно -->
+
+    <div class="modal-closed" id="modal">
+
+        <div>
+            <input id="closebtn" type="button" value="Close">
+        </div>
+        <div id="big_picture" id="big_picture">
+            <img src="img/gallery/big/1.png">
+        </div>
+        <table>
+            <tr id="gallery">
+                <td><img class="tumbnail" id="image_1" src="img/gallery/small/1.png"></td>
+                <td><img class="tumbnail" id="image_2" src="img/gallery/small/2.png"></td>
+                <td><img class="tumbnail" id="image_3" src="img/gallery/small/3.png"></td>
+            </tr>
+        </table>
+    
+    </div>
+
+
 
 </body>
 </html>

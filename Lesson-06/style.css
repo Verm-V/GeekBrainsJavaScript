@@ -7,14 +7,7 @@ pre {
   }
 
 
-.slide p,
-.slide [type="checkbox"]{
-    display:none;
-}
- 
-.slide [type="checkbox"]:checked ~ p {
-    display:block;
-}
+/* Стили списков с товарами */
 
 .box { text-align: center; background-color: #eeeeee; }
 .centered { display: inline-block; margin: 0; }
@@ -37,9 +30,24 @@ pre {
     height: 32px;
 }
 
-.chess-board .white { background: #e4a672; }
-.chess-board .black { background: #b86f50; }
-.white-figure { color: #afbfd2; }
-.black-figure { color: #9e2835; }
+/* Стили модального окна */
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.modal-closed {
+    display: none;
+}
+
+.modal {
+    display: inline;
+}
 
 
