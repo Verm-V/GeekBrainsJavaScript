@@ -8,7 +8,7 @@
 
     <!-- Скрипты -->
         <script async type="module" src="script-01.js"></script>
-        <script async src="gallery.js" type="text/javascript" charset="utf-8"></script>
+
         <!-- -->
 
     <!-- Стили -->
@@ -21,7 +21,8 @@
 <body>
     <h1>Урок 06 - События.</h1>
 
-    <h2>Задания 01 и 02</h2>
+    <h2>Добро пожаловать в наш магазин. Покупайте наших <s>слонов</s> роботов.</h2>
+    <p>Для просмотра картинок - кликните на названии робота.</p>
 
     <div id="catalogue"></div>
     <hr>
@@ -39,7 +40,9 @@
 
 
     <p>Описание заданий.</p>
-    
+
+    <h3>Задания 01 и 02</h3>
+
     <ol>
         <li><p>Продолжение реализации модуля корзины:</p>
             <ul>
@@ -63,18 +66,33 @@
 
     <div class="modal-closed" id="modal">
 
-        <div>
-            <input id="closebtn" type="button" value="Close">
-        </div>
-        <div id="big_picture" id="big_picture">
-            <img src="img/gallery/big/1.png">
-        </div>
-        <table>
-            <tr id="gallery">
-                <td><img class="tumbnail" id="image_1" src="img/gallery/small/1.png"></td>
-                <td><img class="tumbnail" id="image_2" src="img/gallery/small/2.png"></td>
-                <td><img class="tumbnail" id="image_3" src="img/gallery/small/3.png"></td>
+        <table border="1">
+            <tr>
+                <td align="center">
+                    <div>
+                        <input id="closebtn" type="button" value="Close">
+                    </div>
+                </td>
             </tr>
+            <tr>
+                <td align="center">
+                    <div>
+                        <div id="big_picture" id="big_picture">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table>
+                        <tr id="tumbnails">
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+
+            
         </table>
     
     </div>

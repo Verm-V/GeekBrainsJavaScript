@@ -5,11 +5,13 @@ export class Product{
     #id;//ID продукта
     #name;//Наименование товара
     #price;//Цена за единицу товара
+    #picPrefix//Префикс имени файлов с изображениями товара
 
-    constructor(name, price) {
+    constructor(name, price, picPrefix) {
         this.#id = new Uid();
         this.#name = name;
         this.#price = price;
+        this.#picPrefix = picPrefix;
     }
 
     getId() {
@@ -23,6 +25,11 @@ export class Product{
     getPrice() {
         return this.#price;
     }
+
+    getPicPrefix() {
+        return this.#picPrefix;
+    }
+
 }
 
 //Класс товарной позиции (в корзине или на складе)
@@ -224,7 +231,6 @@ export class Catalogue extends Storage{
     }
 
 }
-
 
 //Уникальный идентифифкатор
 export class Uid{
