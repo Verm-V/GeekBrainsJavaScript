@@ -58,4 +58,11 @@ pre {
     display: inline;
 }
 
+.first_color {
+    background-color: cornsilk;
+}
+
+.second_color {
+    background-color: gainsboro;
+}
 
