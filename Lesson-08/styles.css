@@ -12,7 +12,7 @@ html, body {
 }
 
 .score {
-    font-size: 50px;
+    font-size: 24px;
     color: rgb(200, 200, 200);
 }
 .game.started .score {
@@ -29,8 +29,8 @@ html, body {
     display: grid;
     grid-template-rows: repeat(20, 1fr);
     grid-template-columns: repeat(20, 1fr);
-    height: 600px;
-    width: 600px;
+    height: 400px;
+    width: 400px;
     border: rgb(200, 200, 200) 1px solid;
 }
 .board .cell {

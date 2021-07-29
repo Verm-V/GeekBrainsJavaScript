@@ -40,6 +40,7 @@ const game = {
         board.render();
         snake.render();
         food.render();
+        score.resetScore();
     },
 
     /**
@@ -104,6 +105,9 @@ const game = {
             /* удаляем еду с поля */
             food.removeItem(foundFood);
 
+            /* Увеличиваем счет на 1 */
+            score.changeScore(1);
+
             /* генерируем новую еду на поле */
             food.generateItem();
 
@@ -130,8 +134,66 @@ const game = {
         // обратить внимание, как сделать красивее
         element.classList.remove(GAME_STATUS_STARTED, GAME_STATUS_PAUSED, GAME_STATUS_STOPPED);
         element.classList.add(status);
-    }
+    },
+
 };
+
+/**
+ * Объект подсчитывающий очки в игре
+ */
+const score = {
+
+    /**
+    * Функция ищет HTML элемент поля на странице.
+    *
+    * @returns {HTMLElement} Возвращает HTML элемент.
+    */
+    getElement() {
+        return document.getElementById('score');
+    },
+
+    /**
+    * Функция ищет HTML элемент поля на странице.
+    *
+    * @returns {HTMLElement} Возвращает HTML элемент.
+    */
+    getCurrentScore() {
+        return document.getElementById('score-value');
+    },
+    
+    /**
+    * Функция ищет HTML элемент поля на странице.
+    *
+    * @returns {HTMLElement} Возвращает HTML элемент.
+    */
+    getHighScore() {
+        return document.getElementById('highscore-value');
+    },
+    
+    /**
+    * Функция обнуляет текущий счет 
+    */
+    resetScore() {
+        const currentScore = this.getCurrentScore();
+        currentScore.innerHTML = "0";
+    },
+
+    /**
+    * Функция обнуляет текущий счет
+    */
+    changeScore(value) {
+        const currentScore = this.getCurrentScore();
+        const highScore = this.getHighScore();
+        let currentScoreValue = Number.parseInt(currentScore.innerHTML) + value
+        currentScore.innerHTML = currentScoreValue;
+        if (Number.parseInt(highScore.innerHTML) < currentScoreValue) {
+            highScore.innerHTML = currentScoreValue;
+        }
+
+    },
+
+    
+}
 
 /**
  * Объект, представляющий поле, где ползает змейка.
