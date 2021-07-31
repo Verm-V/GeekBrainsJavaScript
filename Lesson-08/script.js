@@ -1,4 +1,4 @@
-const GAME_STATUS_STARTED = 'started';
+﻿const GAME_STATUS_STARTED = 'started';
 const GAME_STATUS_PAUSED  = 'paused';
 const GAME_STATUS_STOPPED = 'stopped';
 
@@ -6,6 +6,12 @@ const SNAKE_DIRECTION_UP = 'up';
 const SNAKE_DIRECTION_DOWN = 'down';
 const SNAKE_DIRECTION_LEFT = 'left';
 const SNAKE_DIRECTION_RIGHT = 'right';
+
+const SNAKE = 'snake';
+const FOOD = 'food';
+
+const SPEED = 150;//Скорость змейки (интервал в милисекундах между шагами)
+const FOOD_MAX = 3;//Максимум еды на поле
 
 /**
  * Объект с настройками конфигурации игры
@@ -23,6 +29,11 @@ const config = {
 const game = {
 
     /**
+     * Cсылка на событие по таймеру
+     */
+    timeEvent: {},
+
+    /**
      * Функция ищет HTML элемент контейнера игры на странице.
      *
      * @returns {HTMLElement} Возвращает HTML элемент.
@@ -32,41 +43,68 @@ const game = {
     },
 
     /**
+     * Инициализация игры при первом старте и полсе Game Over
+     */
+    reset() {
+        this.setGameStatus(GAME_STATUS_STOPPED);
+        snake.reset();
+        food.reset();
+        score.resetScore();
+    },
+
+    /**
      * Функция выполняет старт игры.
      */
     start() {
-        this.setGameStatus(GAME_STATUS_STARTED);
 
-        board.render();
-        snake.render();
-        food.render();
-        score.resetScore();
+        //если игра остановлена то делаем инициализацию
+        if (this.checkGameStatus(GAME_STATUS_STOPPED)) {
+            this.reset();
+            board.render();
+            snake.render();
+            food.render();
+        }
+
+        //сработает только если игра уже итак не запущена
+        if (!this.checkGameStatus(GAME_STATUS_STARTED)) {
+            this.setGameStatus(GAME_STATUS_STARTED);
+            this.timeEvent = window.setInterval(game.move.bind(game), SPEED);
+        }
+
     },
 
     /**
      * Функция выполняет паузу игры.
      */
     pause() {
-        this.setGameStatus(GAME_STATUS_PAUSED);
+        //сработает только если идет игра
+        if (this.checkGameStatus(GAME_STATUS_STARTED)) {
+            this.setGameStatus(GAME_STATUS_PAUSED);
 
-        /* добавить сюда код */
+            window.clearInterval(this.timeEvent);
+        }
     },
 
     /**
      * Функция останавливает игру.
      */
     stop() {
-        this.setGameStatus(GAME_STATUS_STOPPED);
-
-        /* добавить сюда код */
+        //не сработает если игра уже итак остановлена
+        if (!this.checkGameStatus(GAME_STATUS_STOPPED)) {
+            this.setGameStatus(GAME_STATUS_STOPPED);
+            alert("GAME OVER");
+    
+            window.clearInterval(this.timeEvent);
+    
+        }
     },
 
     /**
-     * Функция выполняет передвижение змейки по полю.
+     * Функция обработчик клавиатуры
      *
      * @param event {KeyboardEvent} Событие нажатия на клавишу.
      */
-    move(event) {
+     keysHandler(event) {
         let direction = null;
 
         /* смотрим на код клавишы и
@@ -91,7 +129,22 @@ const game = {
         /* устанавливаем позицию для змейки
          * и запрашиваем координаты следующей позиции */
         snake.setDirection(direction);
+
+        //this.move();
+    },
+
+    /**
+     * Функция выполняет передвижение змейки по полю.
+     */
+    move() {
         const nextPosition = snake.getNextPosition();
+
+        //Проверка на пересечение с телом змеи
+        const status = cells.getCellStatus(nextPosition);
+        if (status == SNAKE) {
+            game.stop();
+            return;
+        }
 
         /* проверяем совпадает ли следующая позиция с какой-нибудь едой */
         const foundFood = food.foundPosition(nextPosition);
@@ -135,6 +188,26 @@ const game = {
         element.classList.remove(GAME_STATUS_STARTED, GAME_STATUS_PAUSED, GAME_STATUS_STOPPED);
         element.classList.add(status);
     },
+
+    /**
+     * Проверяет установлен ли соответствующий статус у игры
+     * 
+     * @param status {GAME_STATUS_STARTED | GAME_STATUS_PAUSED | GAME_STATUS_STOPPED} Строка представляющая статус.
+     * @returns true если статус установлен
+     * 
+     * Технически тут стоило бы сделать возврат конкретного статуса,
+     * и проверять его уже на месте, чтобы можно было построить 
+     * норальную стейт-машину, но пока пусть остается так.
+     */
+    checkGameStatus(status) {
+        let isStatusSet = false;
+        const element = game.getElement();
+        for (const item of element.classList) {
+            if (item == status) { isStatusSet = true };
+        }
+
+        return isStatusSet;
+    }
 
 };
 
@@ -217,9 +290,10 @@ const board = {
      * Функция отрисовывает поле с клетками для игры.
      */
     render() {
-        const board = this.getElement();
+        const boardObj = this.getElement();
+        clearItem(boardObj);
 
-        /* рисуем на странице 20*20 клеток */
+        /* рисуем на странице клетки */
         for (let i = 0; i < config.size**2; i++) {
             const cell = document.createElement('div');
             cell.classList.add('cell');
@@ -229,7 +303,7 @@ const board = {
             cell.dataset.top = Math.trunc(i / config.size);
             cell.dataset.left = i % config.size;
 
-            board.appendChild(cell);
+            boardObj.appendChild(cell);
         }
     }
 };
@@ -247,6 +321,22 @@ const cells = {
      */
     getElements() {
         return document.getElementsByClassName('cell');
+    },
+
+    /**
+     * Проверяет что находится в ячейке
+     * 
+     * @position {{top: number, left: number}} позиция проверяемой клетки
+     * 
+     * @returns содержимое ячейки в виде названия класса
+     */
+    getCellStatus(position) {
+        const cells = this.getElements();
+
+        /* для заданных координат ищем клетку и добавляем класс */
+        const cell = document.querySelector(`.cell[data-top="${position.top}"][data-left="${position.left}"]`);
+
+        return cell.classList[cell.classList.length - 1];
     },
 
     /**
@@ -280,20 +370,12 @@ const snake = {
      * Текущее направление движение змейки.
      * По умолчанию: направо, потому змейка при старте занимает первые три клетки.
      */
-    direction: SNAKE_DIRECTION_RIGHT,
+    direction: {},
 
     /**
      * Содержит массив объектов с координатами частей тела змейки.
-     * По умолчанию: первые три клетки.
-     *
-     * NOTE: обратить внимание, как сделать красивее.
-     * Поменять порядок координат, сейчас первый элемент массива означает хвост.
      */
-    parts: [
-        { top: 0, left: 0 },
-        { top: 0, left: 1 },
-        { top: 0, left: 2 },
-    ],
+    parts: [],
 
     /**
      * Функция устанавливает направление движения.
@@ -383,6 +465,19 @@ const snake = {
     },
 
     /**
+     * Создает змейку заново
+     */
+    reset() {
+        this.parts.length = 0;
+        this.parts.push({ top: 0, left: 0 });
+        this.parts.push({ top: 0, left: 1 });
+        this.parts.push({ top: 0, left: 2 });
+
+        this.direction = SNAKE_DIRECTION_RIGHT;
+        
+    },
+
+    /**
      * Функция отрисовывает змейку на поле.
      */
     render() {
@@ -398,11 +493,17 @@ const food = {
     /**
      * Содержит массив объектов с координатами еды на поле.
      */
-    items: [
-        { top: 5, left: 5 },
-        { top: 1, left: 2 },
-        { top: 8, left: 6 }
-    ],
+    items: [],
+
+    /**
+     * Генерирует новый набор еды
+     */
+    reset() {
+        this.items.length = 0;
+        for (let i = 0; i < FOOD_MAX; i++) {
+            this.generateItem();
+        }
+    },
 
     /**
      * Функция выполняет поиск переданных координат змейки в массиве с едой.
@@ -466,9 +567,12 @@ function init() {
     pauseButton.addEventListener('click', game.pause.bind(game));
     stopButton.addEventListener('click', game.stop.bind(game));
 
+    game.reset();
+
     /* добавляем обработчик при нажатии на любую кнопку на клавиатуре,
      * далее в методе мы будем проверять нужную нам клавишу */
-    window.addEventListener('keydown', game.move);
+    window.addEventListener('keydown', game.keysHandler.bind(game));
+
 }
 
 /**
@@ -481,6 +585,18 @@ function init() {
  */
 function getRandomNumber(min, max) {
     return Math.trunc(Math.random() * (max - min) + min);
+}
+
+/**
+ * Очищает DOM элемент от всех его дочерних элементов.
+ * @param {*} item {object}
+ */
+function clearItem(item) {
+    //Удаляем все внутренности из board
+    while (item.firstChild) {
+        item.firstChild.remove();
+    }
+    
 }
 
 window.addEventListener('load', init);
