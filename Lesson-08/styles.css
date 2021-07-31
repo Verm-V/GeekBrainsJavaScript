@@ -27,14 +27,15 @@ html, body {
 
 .board {
     display: grid;
-    grid-template-rows: repeat(20, 1fr);
-    grid-template-columns: repeat(20, 1fr);
-    height: 480px;
-    width: 480px;
-    border: rgb(200, 200, 200) 1px solid;
+    grid-template-rows: repeat(16, 1fr);
+    grid-template-columns: repeat(16, 1fr);
+    height: 512px;
+    width: 512px;
+    border: rgb(200, 200, 200) 2px solid;
 }
 .board .cell {
-    border: rgb(247 247 247) 1px solid;
+    border: rgb(247 247 247) 0px solid;
+    height: 32px;
 }
 .board .cell.snake {
     background-color: rgb(40, 98, 22);

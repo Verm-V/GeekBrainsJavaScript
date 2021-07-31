@@ -10,7 +10,21 @@ const SNAKE_DIRECTION_RIGHT = 'right';
 const SNAKE = 'snake';
 const FOOD = 'food';
 
-const SPEED = 150;//Скорость змейки (интервал в милисекундах между шагами)
+//Имена тайлов
+const TILE_PATH = "img/tiles/";//местонахождение тайлов
+const TILE_EXT = ".png";
+const TILE_FOOD = "food";
+const TILE_GROUND = "ground";
+//snake
+const TILE_HEAD = "head";
+const TILE_TAIL = "tail";
+const TILE_BODY = "body";
+const TILE_LEFT = "_l";
+const TILE_RIGHT = "_r";
+const TILE_UP = "_u";
+const TILE_DOWN = "_d";
+
+const SPEED = 100;//Скорость змейки (интервал в милисекундах между шагами)
 const FOOD_MAX = 3;//Максимум еды на поле
 
 /**
@@ -20,7 +34,7 @@ const config = {
     /**
      * Размер поля.
      */
-    size: 20
+    size: 16
 };
 
 /**
@@ -295,8 +309,12 @@ const board = {
 
         /* рисуем на странице клетки */
         for (let i = 0; i < config.size**2; i++) {
-            const cell = document.createElement('div');
+            const cell = document.createElement('span');
             cell.classList.add('cell');
+
+            const img = document.createElement('img');
+            img.src = TILE_PATH + TILE_GROUND + TILE_EXT;
+            cell.appendChild(img);
 
             /* высчитываем и записываем в data атрибуты
              * координаты от верхней и левой границы */
@@ -340,6 +358,39 @@ const cells = {
     },
 
     /**
+     * Функция ищет клетку в документе
+     *
+     * @param coordinates {top: number, left: number} Координата очищаемой клетки
+     */
+     findCell(coordinate) {
+
+        return document.querySelector(`.cell[data-top="${coordinate.top}"][data-left="${coordinate.left}"]`);
+    },
+
+
+
+    /**
+     * Функция очищает клетку по заданным координатам
+     *
+     * @param coordinates {top: number, left: number} Координата очищаемой клетки
+     */
+    renderClearCell(coordinate) {
+        const cells = this.getElements();
+
+        const cell = this.findCell(coordinate);
+        clearItem(cell);
+
+        cell.classList.length = 0;
+        cell.classList.add("cell");
+
+        const img = document.createElement('img');
+        img.src = TILE_PATH + TILE_GROUND + TILE_EXT;;
+        cell.appendChild(img);
+
+    },
+
+
+    /**
      * Функция задает класс для клетки по заданным координатам.
      *
      * @param coordinates {Array.<{top: number, left: number}>} Массив координат клеток для изменения.
@@ -348,17 +399,127 @@ const cells = {
     renderItems(coordinates, className) {
         const cells = this.getElements();
 
-        /* для всех клеток на странице удаляем переданный класс */
+        /* для всех клеток на странице удаляем переданный класс если не пустой*/
         for (let cell of cells) {
             cell.classList.remove(className);
         }
 
+        switch (className) {
+            case "food":
+                this.renderFood(coordinates);
+                break;
+            case "snake":
+                this.renderSnake(coordinates);
+                break;
+            }
+
+
+        if (className == "snake") { this.renderSnake(coordinates); }
+
+    },
+
+    
+    /**
+     * Функция отрисовыве змейку на поле с учетом изгибов тела
+     *
+     * @param coordinates {Array.<{top: number, left: number}>} Массив координат клеток для изменения.
+     */
+    renderSnake(coordinates) {
+
+        //Хвост
+        let cell = this.findCell(coordinates[0]);
+        clearItem(cell);
+
+        cell.classList.add("snake");
+        let suffix = getSuffix(coordinates[0], coordinates[1]);
+
+        let img = document.createElement('img');
+        img.src = TILE_PATH + TILE_TAIL + suffix+ TILE_EXT;;
+        cell.appendChild(img);
+
+        //Голова
+        cell = this.findCell(coordinates[coordinates.length-1]);
+        clearItem(cell);
+
+        cell.classList.add("snake");
+        suffix = getSuffix(coordinates[coordinates.length-1], coordinates[coordinates.length-2]);
+
+        img = document.createElement('img');
+        img.src = TILE_PATH + TILE_HEAD + suffix+ TILE_EXT;;
+        cell.appendChild(img);
+
+
+        //Тело
+        for (let i = 1; i < coordinates.length - 1; i++){
+            cell = this.findCell(coordinates[i]);
+            clearItem(cell);
+            cell.classList.add("snake");
+
+            const suffix1 = getSuffix(coordinates[i], coordinates[i - 1]);
+            const suffix2 = getSuffix(coordinates[i], coordinates[i + 1]);
+
+            const img = document.createElement('img');
+            img.src = TILE_PATH + TILE_BODY + suffix1 + suffix2 + TILE_EXT;;
+            cell.appendChild(img);
+
+        }
+
+
+        /**
+         * Возвращает суффикс для имени файла тайла в зависимости от взаимоположениия клеток
+         * 
+         * @param {{top: number, left: number}} coordinateFirst 
+         * @param {{top: number, left: number}} coordinateSecond 
+         * @returns суффикс для имени тайла
+         */
+        function getSuffix(coordinateFirst, coordinateSecond) {
+            let dx = coordinateFirst.left - coordinateSecond.left;
+            let dy = coordinateFirst.top - coordinateSecond.top;
+            let suffix = "";
+            switch(true) {
+                case (dx === -1 || dx > 1):
+                    suffix = TILE_RIGHT;
+                    break;
+                case (dx === 1 || dx < -1):
+                    suffix = TILE_LEFT;
+                    break;
+                case (dy === -1 || dy > 1):
+                    suffix = TILE_DOWN;
+                    break;
+                case (dy === 1 || dy < -1):
+                    suffix = TILE_UP;
+                    break;
+                        
+            }
+            return suffix;
+
+        }
+    },
+
+    /**
+     * Функция отрисовыве еду на поле
+     *
+     * @param coordinates {Array.<{top: number, left: number}>} Массив координат клеток для изменения.
+     */
+    renderFood(coordinates) {
+
         /* для заданных координат ищем клетку и добавляем класс */
         for (let coordinate of coordinates) {
-            const cell = document.querySelector(`.cell[data-top="${coordinate.top}"][data-left="${coordinate.left}"]`);
-            cell.classList.add(className);
+            const cell = this.findCell(coordinate);
+            clearItem(cell);
+            cell.classList.add("food");
+
+            const img = document.createElement('img');
+            img.src = TILE_PATH + TILE_FOOD + TILE_EXT;;
+            cell.appendChild(img);
+                        
         }
+    
     }
+    
+    
+    
+     
 };
 
 /**
@@ -457,6 +618,7 @@ const snake = {
          * если флаг будет отрицательным, то при установки позиции, мы не отрезаем хвост,
          * а значит увеличиваем змейку на одну клетку, это будет означать, что она съела еду */
         if (shift) {
+            cells.renderClearCell(this.parts[0]);
             this.parts.shift();
         }
 
@@ -600,3 +762,38 @@ function clearItem(item) {
 }
 
 window.addEventListener('load', init);
+preloadImages([
+    "ground", "food",
+    "tail_d", "tail_u", "tail_l", "tail_r",
+    "head_d", "head_u", "head_l", "head_r",
+    "body_l_r", "body_r_l", "body_d_u", "body_u_d",
+    "body_l_d", "body_l_u", "body_r_d", "body_r_u",
+    "body_u_l", "body_u_r", "body_d_l", "body_d_r",
+    ]);
+
+
+/**
+ * Предзагрузка изображений в кэш браузера
+ * 
+ * @param {*} array массив с набором имен изображений
+ */
+function preloadImages(array) {
+    if (!preloadImages.list) {
+        preloadImages.list = [];
+    }
+    var list = preloadImages.list;
+
+    for (var i = 0; i < array.length; i++) {
+        var img = new Image();
+        img.onload = function() {
+            var index = list.indexOf(this);
+            if (index !== -1) {
+                // удаление тайла из массива для экономии памяти
+                list.splice(index, 1);
+            }
+        }
+        list.push(img);
+        img.src = TILE_PATH +  array[i] + TILE_EXT;
+    }
+}
+
