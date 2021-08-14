@@ -1,0 +1,17 @@
+pre {
+    font-family: Consolas,"courier new";
+    color: black;
+    background-color: #e8e8e8;
+    padding: 2px;
+    font-size: 90%;
+  }
+
+
+.slide p,
+.slide [type="checkbox"]{
+    display:none;
+}
+ 
+.slide [type="checkbox"]:checked ~ p {
+    display:block;
+}
