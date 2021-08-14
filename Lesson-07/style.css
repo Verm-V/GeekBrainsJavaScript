@@ -1,0 +1,68 @@
+pre {
+    font-family: Consolas,"courier new";
+    color: black;
+    background-color: #e8e8e8;
+    padding: 2px;
+    font-size: 90%;
+  }
+
+
+/* Стили списков с товарами */
+
+.box { text-align: center; background-color: #eeeeee; }
+.centered { display: inline-block; margin: 0; }
+.products-list { border-spacing: 0; border-collapse: collapse; }
+.products-list th { 
+    font-size: 20px;
+    border: 1px dotted; 
+    text-align: center; vertical-align: middle; 
+    padding: 8px; 
+    text-align: center; }
+.products-list td { 
+    font-size: 24px;
+    border: 1px solid; 
+    padding: 4px; 
+    height: 28px; 
+    text-align: left; vertical-align: middle; 
+    text-shadow: #ffffff 1px 0 0px, #000 0 1px 0px, #000 -1px 0 0px, #000 0 -1px 0px;}
+.products-list input {
+    font-size: 16px;
+    height: 32px;
+}
+
+/* Стили модального окна */
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+    max-height: 100%;
+    background-color: #000;
+}
+
+.modal-closed {
+    display: none;
+}
+
+.modal {
+    display: inline;
+}
+
+.basket_part_folded {
+    display: none;
+}
+
+.basket_part {
+    display: inline;
+}
+
+.first_color {
+    background-color: cornsilk;
+}
+
+.second_color {
+    background-color: gainsboro;
+}
+
