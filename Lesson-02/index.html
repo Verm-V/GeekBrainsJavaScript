@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Скрипты -->
+    <script src="script-03.js" type="text/javascript" charset="utf-8"></script>
+    <script src="script-04.js" type="text/javascript" charset="utf-8"></script>
+    <script src="script-05.js" type="text/javascript" charset="utf-8"></script>
+    <script src="script-08.js" type="text/javascript" charset="utf-8"></script>
+    <!-- -->
+
+    <!-- Стили -->
+    <style>
+        pre {
+          font-family: Consolas,"courier new";
+          color: black;
+          background-color: #e8e8e8;
+          padding: 2px;
+          font-size: 90%;
+        }
+    </style>
+    <!-- -->
+
+
+</head>
+<body>
+    <h1>Урок 02 - Основные операторы JavaScript</h1>
+
+<ul>
+    <li>
+        <h2>Задание 01</h2>
+        <p>Почему код дает именно такие результаты?</p>
+        <pre>
+var a = 1, b = 1, c, d;
+c = ++a; alert(c);           // 2 - сначала происходит инкремент переменной 'a', затем ее значение присваивается переменной 'c'
+d = b++; alert(d);           // 1 - сначала переменной 'c' присваивается значение из 'b', затем происходит инкремент 'b', результат присваивается в 'd'
+c = (2+ ++a); alert(c);      // 5 - сначала происходит инкремент 'a' затем ее значение складывается с '2', результат присваивается в 'c'
+d = (2+ b++); alert(d);      // 4 - сначала '2' складывается с значением из 'b' (это помещается в 'd'), значение в 'b' инкрементируется
+alert(a);                    // 3 - значение переменной 'a' было дважды инкрементировано в предыдущих инструкциях
+alert(b);                    // 3 - значение переменной 'b' было дважды инкрементировано в предыдущих инструкциях
+        </pre>
+        <hr>
+    </li>
+
+    <li>
+        <h2>Задание 02</h2>
+        <p>Чему будет равен x?</p>
+        <pre>
+var a = 2;
+var x = 1 + (a *= 2);            
+        </pre>
+        <p>Переменная <b>x</b> будет содержать значение <b><span id="t02_01"></span></b></p>
+        <p>В выражение сначала удваивается значение переменной <b>a</b> затем оно прибавляется к <b>1</b></p>
+        <script async src="script-02.js" type="text/javascript" charset="utf-8"></script>
+        <hr>
+    </li>
+
+    <li>
+        <h2>Задание 03</h2>
+        <p>Объявить две целочисленные перменные - a и b и задать им произвольные начальные значения. 
+            Затем написать скрипт, который работает по следующему принципу:
+        </p>
+        <ul>
+            <li>если a и b положительные, вывести их разность;</li>
+            <li>если a и b отрицательные, вывести их произведение;</li>
+            <li>если a и b разных знаков, вывести их сумму;</li>
+        </ul>
+        <p>Ноль можно считать положительным числом.</p>
+        <p>
+            |<span id="t03_01"></span><br>
+            |<span id="t03_02"></span><br>
+            |<span id="t03_03"></span><br>
+            |<span id="t03_04"></span>
+        </p>
+        <h3><p>Результат работы скрипта <a href="script-03.js" type="text/javascript"><i>script-03.js</i></a> :
+                <input type="button" value="Запустить скрипт (значения чисел случайны)" onclick="Script_03()"></p>
+        </h3>
+
+        
+        <hr>
+
+    </li>
+
+    <li>
+        <h2>Задание 04</h2>
+        <p> Присвоить переменной a значение в промежутке [0...15]. 
+            С помощью оператора switch организовать вывод чисел от a до 15.
+        </p>
+        <p>
+            |<span id="t04_01"></span><br>
+            |<span id="t04_02"></span><br>
+            |<span id="t04_03"></span>
+        </p>
+
+        <h3><p>Результат работы скрипта <a href="script-04.js" type="text/javascript"><i>script-04.js</i></a> :
+            <input type="button" value="Запустить скрипт (a выбирается случайно)" onclick="Script_04()"></p>
+        </h3>
+
+        <hr>
+    </li>
+
+    <li>
+        <h2>Задание 05 и 06</h2>
+        <p>Реализовать четыре основные арифметические операции в виде функций с двумя параметрами. Обязательно использовать оператор <b>return</b>
+        </p>
+        <p>Реализовать функцию с тремя параметрами: <b>function mathOperation(arg1, arg2, operation)</b>, где <b>arg1, arg2</b> - значения аргументов, <b>operation</b> - строка с названием операции. В зависимости от переданного значения, выполнить одну из арифметических операций (использовать функции из пункта 5) и вернуть полученное значение (применить <b>switch</b>)
+        </p>
+
+        <br>
+        <input type="number" id="arg1" value="10"/><br>
+        <input type="number" id="arg2" value="5"/><br>
+        <select id="operation">
+            <option value="sum">sum</option>
+            <option value="sub">sub</option>
+            <option value="mul">mul</option>
+            <option value="div">div</option>
+        </select>
+        <p>
+            |<span id="t05_01"></span><br>
+            |<span id="t05_02"></span>
+        </p>
+
+
+        <h3><p>Результат работы скрипта <a href="script-05.js" type="text/javascript"><i>script-05.js</i></a> :
+            <input type="button" value="Тест функции mathOperation" onclick="Script_05()"></p>
+        </h3>
+        
+        <hr>
+
+    </li>
+
+    <li>
+        <h2>Задание 07</h2>
+        <p>Сравнить <b>null</b> и <b>0</b>, объяснить результат.</p>
+        <p>
+            <span id="t07_01"></span><br>
+            <span id="t07_02"></span><br>
+            <span id="t07_03"></span><br>
+            <span id="t07_04"></span><br>
+            <span id="t07_05"></span><br>
+            <span id="t07_06"></span>
+        </p>
+
+        <script async src="script-07.js" type="text/javascript" charset="utf-8"></script>
+
+        <p>Согласно спецификации языка <b>null</b> не равно ничему 
+            и при строгом и нестрогом равенстве выдает <b>false</b><br>
+            Строгое равенство (===) выдает <b>false</b>, еще и из-за разности типов<br>
+            При использовании операторов сравнения <b>null</b> преобразуется к <b>0</b>, 
+            поэтому сравнения <b>&lt;</b> и <b>&gt;</b> выдают <b>false</b>, 
+            а сравнения <b>&lt;=</b> и <b>&gt;=</b> выдают <b>true</b>
+        </p>
+        <hr>
+    </li>
+
+    <li>
+        <h2>Задание 08</h2>
+        <p>С помощью рекурсии организовать функцию возведения числа в степень. 
+            Формат: <b>function power(val, pow)</b>, где <b>val</b> - заданное число, <b>pow</b> - степень.
+        </p>
+        <br>
+        <input type="number" id="val" value="2"/><br>
+        <input type="number" id="pow" value="3" min="0"/>
+
+        <p>
+            |<span id="t08_01"></span>
+        </p>
+
+        <h3><p>Результат работы скрипта <a href="script-08.js" type="text/javascript"><i>script-08.js</i></a> :
+            <input type="button" value="Тест функции power" onclick="Script_08()"></p>
+        </h3>
+        
+        <hr>
+
+    </li>
+
+</ul>    
+
+</body>
+</html>
